@@ -5,3 +5,5 @@ CREATE TABLE student (
     age INT NOT NULL,
     major VARCHAR(100) NOT NULL
 );
+
+
