@@ -55,6 +55,34 @@ class Student extends MySQLDatabase{
         $stmt->execute([$this->name, $this->email, $this->age, $this->major]);
     }
 
+    public function read(){
+        $stmt = $this->conn->prepare('SELECT * from student where id = ?');
+        $stmt->execute([$this->id]);
+        $student = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->name = $student['name'];
+        $this->email = $student['email'];
+        $this->age = $student['age'];
+        $this->major = $student['major'];
+    }
+
+    public function update(){
+        $stmt = $this->conn->prepare('UPDATE student SET name = ?, email = ?, age = ?, major = ? WHERE id = ?');
+        $stmt->execute([$this->name, $this->email, $this->age, $this->major, $this->id]);
+    }
+
+    public function delete(){
+        $stmt = $this->conn->prepare('DELETE FROM student WHERE id = ?');
+        $stmt->execute([$this->id]);
+    }
+
+    //static method for listing all students
+    public static function all(){
+        $db = new MySQLDatabase();
+        $stmt = $db->conn->prepare('SELECT * FROM student');
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
 }
 ?>
