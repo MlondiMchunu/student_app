@@ -1,44 +1,34 @@
 <?php
 include_once 'config/config.php';
 
-try {
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        if (isset($_POST['create'])) {
-            $name = $_POST['name'];
-            $age = $_POST['age'];
-            $level = $_POST['level'];
-            $student = new Undergraduate($name, $age, $level);
-            if ($student->save()) {
-                echo "Student created successfully.";
-            } else {
-                echo "Failed to create student.";
-            }
-        } elseif (isset($_POST['update'])) {
-            $id = $_POST['id'];
-            $name = $_POST['name'];
-            $age = $_POST['age'];
-            $level = $_POST['level'];
-            $student = new Undergraduate($name, $age, $level);
-            if ($student->update($id)) {
-                echo "Student updated successfully.";
-            } else {
-                echo "Failed to update student.";
-            }
-        } elseif (isset($_POST['delete'])) {
-            $id = $_POST['id'];
-            $student = new Undergraduate("", 0, "");
-            if ($student->delete($id)) {
-                echo "Student deleted successfully.";
-            } else {
-                echo "Failed to delete student.";
-            }
-        }
-    }
+$errorMessage = '';
 
-    $students = Undergraduate::getAll();
-} catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['create'])) {
+        $name = $_POST['name'];
+        $age = $_POST['age'];
+        $level = $_POST['level'];
+        $student = new Undergraduate($name, $age, $level);
+        if ($student->exists()) {
+            $errorMessage = "Student already exists.";
+        } else {
+            $student->save();
+        }
+    } elseif (isset($_POST['update'])) {
+        $id = $_POST['id'];
+        $name = $_POST['name'];
+        $age = $_POST['age'];
+        $level = $_POST['level'];
+        $student = new Undergraduate($name, $age, $level);
+        $student->update($id);
+    } elseif (isset($_POST['delete'])) {
+        $id = $_POST['id'];
+        $student = new Undergraduate("", 0, "");
+        $student->delete($id);
+    }
 }
+
+$students = Undergraduate::getAll();
 ?>
 
 <!DOCTYPE html>
@@ -49,6 +39,10 @@ try {
 </head>
 <body>
     <h1>Student Management</h1>
+
+    <?php if (!empty($errorMessage)): ?>
+        <p class="error"><?= $errorMessage ?></p>
+    <?php endif; ?>
 
     <form method="POST" action="index.php">
         <input type="hidden" name="id" id="id">
