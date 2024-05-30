@@ -48,5 +48,13 @@ class Student extends MySQLDatabase{
     public function getMajor(){
         return $this->major;
     }
+
+    //CRUD Operations
+    public function create(){
+        $stmt = $this->conn->prepare('INSERT INTO students (name, email, age, major) VALUES (?, ?, ?, ?)');
+        $stmt->execute([$this->name, $this->email, $this->age, $this->major]);
+    }
+
+
 }
 ?>
