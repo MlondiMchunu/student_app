@@ -24,3 +24,9 @@ th, td {
     padding: 10px;
     text-align: center;
 }
+
+.error {
+    color: red;
+    text-align: center;
+    font-weight: bold;
+}
