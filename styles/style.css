@@ -1,0 +1,45 @@
+body{
+    font-family: Arial, sans-serif;
+}
+
+h1{
+    text-align:center;
+}
+
+form{
+    display:flex;
+    flex-direction: column;
+    width: 300px;
+    margin: 0 auto;
+}
+
+label, input{
+    margin-bottom: 10px;
+}
+
+button{
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover{
+    background-color: #45a049;
+}
+
+table{
+    width:80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+th, td{
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+th{
+    background-color: #f2f2f2;
+}
