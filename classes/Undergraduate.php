@@ -15,43 +15,33 @@ class Undergraduate extends Student {
         return "Name: $this->name, Age: $this->age, Level: $this->level";
     }
 
+    private function studentExists() {
+        $query = "SELECT * FROM students WHERE name = :name AND age = :age AND level = :level";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':name', $this->name);
+        $stmt->bindParam(':age', $this->age);
+        $stmt->bindParam(':level', $this->level);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
+
+    private function isEligible() {
+        return $this->age >= 15;
+    }
+
     public function save() {
+        if ($this->studentExists()) {
+            throw new Exception("Student already exists");
+        }
+        if (!$this->isEligible()) {
+            throw new Exception("Student is ineligible for college");
+        }
         try {
-            if ($this->exists()) {
-                throw new Exception("Student already exists.");
-            }
             $query = "INSERT INTO students (name, age, level) VALUES (:name, :age, :level)";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':name', $this->name);
             $stmt->bindParam(':age', $this->age);
             $stmt->bindParam(':level', $this->level);
-            return $stmt->execute();
-        } catch (PDOException $exception) {
-            echo "Error: " . $exception->getMessage();
-        } catch (Exception $exception) {
-            echo "Error: " . $exception->getMessage();
-        }
-    }
-
-    public function update($id) {
-        try {
-            $query = "UPDATE students SET name = :name, age = :age, level = :level WHERE id = :id";
-            $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(':name', $this->name);
-            $stmt->bindParam(':age', $this->age);
-            $stmt->bindParam(':level', $this->level);
-            $stmt->bindParam(':id', $id);
-            return $stmt->execute();
-        } catch (PDOException $exception) {
-            echo "Error: " . $exception->getMessage();
-        }
-    }
-
-    public function delete($id) {
-        try {
-            $query = "DELETE FROM students WHERE id = :id";
-            $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(':id', $id);
             return $stmt->execute();
         } catch (PDOException $exception) {
             echo "Error: " . $exception->getMessage();
@@ -77,14 +67,29 @@ class Undergraduate extends Student {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    private function exists() {
-        $query = "SELECT COUNT(*) FROM students WHERE name = :name AND age = :age AND level = :level";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':name', $this->name);
-        $stmt->bindParam(':age', $this->age);
-        $stmt->bindParam(':level', $this->level);
-        $stmt->execute();
-        return $stmt->fetchColumn() > 0;
+    public function update($id) {
+        try {
+            $query = "UPDATE students SET name = :name, age = :age, level = :level WHERE id = :id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':name', $this->name);
+            $stmt->bindParam(':age', $this->age);
+            $stmt->bindParam(':level', $this->level);
+            $stmt->bindParam(':id', $id);
+            return $stmt->execute();
+        } catch (PDOException $exception) {
+            echo "Error: " . $exception->getMessage();
+        }
+    }
+
+    public function delete($id) {
+        try {
+            $query = "DELETE FROM students WHERE id = :id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':id', $id);
+            return $stmt->execute();
+        } catch (PDOException $exception) {
+            echo "Error: " . $exception->getMessage();
+        }
     }
 }
 ?>

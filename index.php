@@ -1,7 +1,7 @@
 <?php
 include_once 'config/config.php';
 
-$errorMessage = '';
+$error = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['create'])) {
@@ -9,10 +9,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $age = $_POST['age'];
         $level = $_POST['level'];
         $student = new Undergraduate($name, $age, $level);
-        if ($student->exists()) {
-            $errorMessage = "Student already exists.";
-        } else {
+        try {
             $student->save();
+        } catch (Exception $e) {
+            $error = $e->getMessage();
         }
     } elseif (isset($_POST['update'])) {
         $id = $_POST['id'];
@@ -40,8 +40,8 @@ $students = Undergraduate::getAll();
 <body>
     <h1>Student Management</h1>
 
-    <?php if (!empty($errorMessage)): ?>
-        <p class="error"><?= $errorMessage ?></p>
+    <?php if ($error): ?>
+        <div class="error"><?= $error ?></div>
     <?php endif; ?>
 
     <form method="POST" action="index.php">
