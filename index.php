@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initia-scale=1.0">
         <title> Student Management</title>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="styles/style.css">
     </head> 
     <body>
         <h1>Student Management System</h1>
@@ -35,5 +35,5 @@
             <!-- Dynamic content will be displayed here -->
         </tbody>
         </table>
-        <script src="scripts.js"></script>
+        <script src="scripts/script.js"></script>
     </body>

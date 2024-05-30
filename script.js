@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     async function loadStudents() {
-        const response = await fetch('students.php');
+        const response = await fetch('student.php');
         const students = await response.json();
         studentsTable.innerHTML = '';
         students.forEach(student => {
